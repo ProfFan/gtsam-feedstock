@@ -18,10 +18,12 @@ source:
     - if: win
       then: ../recipe/fix-boost.patch
     - ../recipe/fix-missing-includes.patch
+    - if: unix
+      then: ../recipe/fix-linux-link-libm-for-cephes.patch
     - ../recipe/windows_python_fix_part_of_pr1685.patch
 
 build:
-  number: 0
+  number: 1
   script:
     - if: unix
       then:
@@ -111,4 +113,3 @@ extra:
     - ameysutavani
     - Tobias-Fischer
     - traversaro
-

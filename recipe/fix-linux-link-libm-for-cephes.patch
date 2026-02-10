@@ -1,0 +1,16 @@
+diff --git a/gtsam/3rdparty/cephes/CMakeLists.txt b/gtsam/3rdparty/cephes/CMakeLists.txt
+index 34f5cfd4f..e6f1f67fd 100644
+--- a/gtsam/3rdparty/cephes/CMakeLists.txt
++++ b/gtsam/3rdparty/cephes/CMakeLists.txt
+@@ -95,6 +95,11 @@ target_include_directories(
+   cephes-gtsam BEFORE PUBLIC $<INSTALL_INTERFACE:include/gtsam/3rdparty/cephes/>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+ 
++# Cephes math routines require symbols from libm on Linux (e.g. sincos IFUNC).
++if(UNIX AND NOT WIN32)
++  target_link_libraries(cephes-gtsam PRIVATE m)
++endif()
++
+ set_target_properties(
+   cephes-gtsam
+   PROPERTIES VERSION ${PROJECT_VERSION}
