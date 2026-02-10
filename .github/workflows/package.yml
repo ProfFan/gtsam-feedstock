@@ -2,8 +2,11 @@ name: Package
 
 on:
   push:
-  pull_request:
-  workflow_dispatch:
+    branches:
+    - master
+
+permissions:
+  id-token: write
 
 jobs:
   build:
