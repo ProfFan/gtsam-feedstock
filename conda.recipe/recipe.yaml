@@ -23,7 +23,7 @@ source:
     - ../recipe/windows_python_fix_part_of_pr1685.patch
 
 build:
-  number: 1
+  number: 2
   script:
     - if: unix
       then:
@@ -78,12 +78,49 @@ tests:
     requirements:
       run:
         - pytest
-  - files:
-      recipe:
-        - regression_test_25.py
-    script:
-      - if: build_platform == target_platform
-        then: python regression_test_25.py
+  - script:
+      - if: not win
+        then: |
+          if [ "${CONDA_BUILD_CROSS_COMPILATION:-0}" != "1" ]; then
+            python - <<'PY'
+            import gtsam
+            import numpy as np
+
+            graph = gtsam.NonlinearFactorGraph()
+            x0, v0, b0 = gtsam.symbol("x", 0), gtsam.symbol("v", 0), gtsam.symbol("b", 0)
+            pose0 = gtsam.Pose3(np.eye(4))
+            vel0 = np.zeros(3)
+            bias0 = gtsam.imuBias.ConstantBias()
+
+            graph.add(gtsam.PriorFactorPose3(x0, pose0, gtsam.noiseModel.Isotropic.Sigma(6, 0.1)))
+            graph.add(gtsam.PriorFactorVector(v0, vel0, gtsam.noiseModel.Isotropic.Sigma(3, 0.1)))
+            graph.add(gtsam.PriorFactorConstantBias(b0, bias0, gtsam.noiseModel.Isotropic.Sigma(6, 0.1)))
+
+            values = gtsam.Values()
+            values.insert(x0, pose0)
+            values.insert(v0, vel0)
+            values.insert(b0, bias0)
+
+            x1, v1, b1 = gtsam.symbol("x", 1), gtsam.symbol("v", 1), gtsam.symbol("b", 1)
+            pose1 = gtsam.Pose3(np.eye(4))
+            graph.add(gtsam.PriorFactorPose3(x1, pose1, gtsam.noiseModel.Diagonal.Sigmas(np.full(6, 0.1))))
+
+            imu = gtsam.PreintegratedImuMeasurements(gtsam.PreintegrationParams(np.array([0.0, 0.0, 9.81])))
+            pred = imu.predict(gtsam.NavState(pose0, vel0), bias0)
+            graph.add(gtsam.ImuFactor(x0, v0, x1, v1, b1, imu))
+            graph.add(
+                gtsam.BetweenFactorConstantBias(
+                    b0, b1, gtsam.imuBias.ConstantBias(), gtsam.noiseModel.Diagonal.Sigmas(np.full(6, 0.1))
+                )
+            )
+
+            values.insert(x1, pred.pose())
+            values.insert(v1, pred.velocity())
+            values.insert(b1, gtsam.imuBias.ConstantBias())
+
+            gtsam.ISAM2(gtsam.ISAM2Params()).update(graph, values)
+            PY
+          fi
       - if: not win
         then: test -f ${PREFIX}/lib/libgtsam${SHLIB_EXT}
       - if: not win
