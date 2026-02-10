@@ -1,0 +1,71 @@
+name: Package
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build package (${{ matrix.target-platform }}, py${{ matrix.python-tag }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target-platform: linux-64
+            python-tag: "3.12"
+            variant-file: .ci_support/linux_64_python3.12.____cpython.yaml
+          - os: ubuntu-latest
+            target-platform: linux-64
+            python-tag: "3.13"
+            variant-file: .ci_support/linux_64_python3.13.____cp313.yaml
+          - os: ubuntu-latest
+            target-platform: linux-64
+            python-tag: "3.14"
+            variant-file: .ci_support/linux_64_python3.14.____cp314.yaml
+          - os: ubuntu-latest
+            target-platform: linux-64
+            python-tag: "3.14t"
+            variant-file: .ci_support/linux_64_python3.14t.____cp314t.yaml
+          # - os: macos-13
+          #   target-platform: osx-64
+          #   python-tag: "3.12"
+          #   variant-file: .ci_support/osx_64_python3.12.____cpython.yaml
+          # - os: macos-13
+          #   target-platform: osx-64
+          #   python-tag: "3.13"
+          #   variant-file: .ci_support/osx_64_python3.13.____cp313.yaml
+          # - os: macos-13
+          #   target-platform: osx-64
+          #   python-tag: "3.14"
+          #   variant-file: .ci_support/osx_64_python3.14.____cp314.yaml
+          - os: macos-13
+            target-platform: osx-64
+            python-tag: "3.14t"
+            variant-file: .ci_support/osx_64_python3.14t.____cp314t.yaml
+          - os: macos-latest
+            target-platform: osx-arm64
+            python-tag: "3.12"
+            variant-file: .ci_support/osx_arm64_python3.12.____cpython.yaml
+          - os: macos-latest
+            target-platform: osx-arm64
+            python-tag: "3.13"
+            variant-file: .ci_support/osx_arm64_python3.13.____cp313.yaml
+          - os: macos-latest
+            target-platform: osx-arm64
+            python-tag: "3.14"
+            variant-file: .ci_support/osx_arm64_python3.14.____cp314.yaml
+          - os: macos-latest
+            target-platform: osx-arm64
+            python-tag: "3.14t"
+            variant-file: .ci_support/osx_arm64_python3.14t.____cp314t.yaml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build conda package
+        uses: prefix-dev/rattler-build-action@v0.2.34
+        with:
+          artifact-name: package-${{ matrix.target-platform }}-py${{ matrix.python-tag }}
+          recipe-path: conda.recipe/recipe.yaml
+          build-args: --target-platform ${{ matrix.target-platform }} -m ${{ matrix.variant-file }}
