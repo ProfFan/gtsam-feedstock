@@ -41,10 +41,10 @@ jobs:
           #   target-platform: osx-64
           #   python-tag: "3.14"
           #   variant-file: .ci_support/osx_64_python3.14.____cp314.yaml
-          - os: macos-13
-            target-platform: osx-64
-            python-tag: "3.14t"
-            variant-file: .ci_support/osx_64_python3.14t.____cp314t.yaml
+          # - os: macos-13
+          #   target-platform: osx-64
+          #   python-tag: "3.14t"
+          #   variant-file: .ci_support/osx_64_python3.14t.____cp314t.yaml
           - os: macos-latest
             target-platform: osx-arm64
             python-tag: "3.12"
@@ -69,3 +69,8 @@ jobs:
           artifact-name: package-${{ matrix.target-platform }}-py${{ matrix.python-tag }}
           recipe-path: conda.recipe/recipe.yaml
           build-args: --target-platform ${{ matrix.target-platform }} -m ${{ matrix.variant-file }}
+      - run: |
+          for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \) ); do
+            echo "Uploading ${pkg}"
+            rattler-build upload prefix -c gtsam-devel "${pkg}"
+          done
