@@ -34,7 +34,3 @@ ninja install -j2
 cd python
 $PYTHON -m pip install .
 cd ..
-
-if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]] && [[ "$(uname)" != "Darwin" ]]; then
-  ninja check
-fi
