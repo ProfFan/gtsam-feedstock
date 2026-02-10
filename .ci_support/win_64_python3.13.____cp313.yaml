@@ -25,9 +25,9 @@ suitesparse:
 target_platform:
 - win-64
 tbb:
-- '2021'
+- '2022'
 tbb_devel:
-- '2021'
+- '2022'
 zip_keys:
 - - python
   - channel_sources
