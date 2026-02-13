@@ -29,7 +29,7 @@ cmake .. ${CMAKE_ARGS} \
         -DPython_EXECUTABLE=$PYTHON \
         -DPYTHON_EXECUTABLE=$PYTHON
 
-ninja install -j2
+ninja install
 
 cd python
 $PYTHON -m pip install .
