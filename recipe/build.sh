@@ -19,6 +19,7 @@ cmake .. ${CMAKE_ARGS} \
         ${MODULE_EXT} \
         -GNinja \
         -DCMAKE_MACOSX_RPATH=1 \
+        -DGTSAM_BUILD_UNSTABLE:OPTION=ON \
         -DGTSAM_BUILD_WITH_MARCH_NATIVE=OFF \
         -DGTSAM_USE_SYSTEM_EIGEN=ON \
         -DGTSAM_USE_SYSTEM_PYBIND=ON \
