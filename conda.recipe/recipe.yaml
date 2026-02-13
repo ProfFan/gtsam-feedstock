@@ -2,15 +2,15 @@ schema_version: 1
 
 context:
   name: gtsam
-  version: 4.3a1
+  version: 4.3a1.post1
 
 package:
   name: gtsam
   version: ${{ version }}
 
 source:
-  url: https://github.com/borglab/gtsam/archive/refs/tags/${{ version }}.tar.gz
-  sha256: 4233192fd9154aa2c0ccd05aebd833d8bf67307888774895e7b3b3d98b31607a
+  url: https://github.com/borglab/gtsam/archive/refs/tags/4.3a1-conda.tar.gz
+  sha256: 5cef4089b91bd4bafc3f5e8a49dc02927e841f6f936e044be027bc7378d74645
   patches:
     - ../recipe/nobuild-examples-timing.patch
     - if: win
