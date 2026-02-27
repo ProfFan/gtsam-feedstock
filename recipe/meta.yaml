@@ -1,6 +1,6 @@
 {% set name = "gtsam" %}
 {% set version = "4.3a1" %}
-{% set postrel = ".post1" %}
+{% set postrel = ".post3" %}
 
 package:
   name: gtsam

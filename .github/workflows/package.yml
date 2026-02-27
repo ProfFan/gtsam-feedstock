@@ -21,13 +21,25 @@ jobs:
             python-tag: "3.12"
             variant-file: .ci_support/linux_64_python3.12.____cpython.yaml
           - os: ubuntu-latest
+            target-platform: linux-aarch64
+            python-tag: "3.12"
+            variant-file: .ci_support/linux_aarch64_python3.12.____cpython.yaml
+          - os: ubuntu-latest
             target-platform: linux-64
             python-tag: "3.13"
             variant-file: .ci_support/linux_64_python3.13.____cp313.yaml
           - os: ubuntu-latest
+            target-platform: linux-aarch64
+            python-tag: "3.13"
+            variant-file: .ci_support/linux_aarch64_python3.13.____cp313.yaml
+          - os: ubuntu-latest
             target-platform: linux-64
             python-tag: "3.14"
             variant-file: .ci_support/linux_64_python3.14.____cp314.yaml
+          - os: ubuntu-latest
+            target-platform: linux-aarch64
+            python-tag: "3.14"
+            variant-file: .ci_support/linux_aarch64_python3.14.____cp314.yaml
           - os: ubuntu-latest
             target-platform: linux-64
             python-tag: "3.14t"
