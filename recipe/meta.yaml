@@ -1,14 +1,14 @@
 {% set name = "gtsam" %}
 {% set version = "4.3a1" %}
-{% set postrel = ".post3" %}
+{% set postrel = ".post4" %}
 
 package:
   name: gtsam
   version: '{{ version }}{{ postrel }}'
 
 source:
-  url: https://github.com/borglab/gtsam/archive/refs/tags/{{ version }}-conda.tar.gz
-  sha256: 5cef4089b91bd4bafc3f5e8a49dc02927e841f6f936e044be027bc7378d74645
+  url: https://github.com/borglab/gtsam/archive/2f350750c862d3bedbe022eac443f303afebc480.zip
+  sha256: 268f649e56f72671ea5232718903f6f16d47bad5dde2bbd90b71a78c7fb10df7
   patches:
     - nobuild-examples-timing.patch
     - fix-python-build-win.patch  # [win]
